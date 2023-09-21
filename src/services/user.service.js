@@ -29,7 +29,7 @@ export default class User {
   }
 
   static changePass = async (login, newPass) => {
-    const connection = await getConnection()
+    const connection = await Mysql.connect()
     try {
       await connection.query('call changePasswd(?, ?)', [login, toBase64(newPass)])
       return 'password changed successfully'
