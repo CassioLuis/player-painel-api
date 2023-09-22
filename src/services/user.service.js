@@ -28,6 +28,21 @@ export default class User {
     }
   }
 
+  static addUser = async ({ name, password, truename, email }) => {
+    const connection = await Mysql.connect()
+    try {
+      await connection.query(`
+        call adduser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      `,[name, password, '', '', truename, '', email, '', '', '', '', '', '', '', '', '', '']
+      )
+      return 'user successfully registered'
+    } catch (error) {
+      return { error }
+    } finally {
+      connection.release()
+    }
+  }
+
   static changePass = async (login, newPass) => {
     const connection = await Mysql.connect()
     try {

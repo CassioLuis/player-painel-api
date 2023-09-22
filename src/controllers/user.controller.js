@@ -1,15 +1,24 @@
 import User from '../services/user.service.js'
+import toBase64 from '../utils/passEncode.js'
 
 export default class UserController {
 
-  static addUser = (req, res) => {
-    res.send('ola')
+  static addUser = async (req, res) => {
+    try {
+      const body = req.body
+      const encodedPass = toBase64(body.truename + body.password)
+      if (!Object.entries(body).length) return res.status(404).send({ message: 'register invalid' })
+      const response = await User.addUser({...body, password: encodedPass})
+      return res.status(200).send({ message: response })
+    } catch (error) {
+      res.json({ error })
+    }
   }
   
   static getUsers = async (req, res) => {
     try {
       const data = await User.getUsers()
-      if (!data.length) return res.status(404).send({ message: 'record not found' })
+      if (!data.length) return res.status(404).send({ message: 'records not found' })
       return res.json({ message: data })
     } catch (error) {
       res.json({ error })
