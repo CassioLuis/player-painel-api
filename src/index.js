@@ -8,4 +8,6 @@ app.use(cors())
 app.use(express.json())
 app.use('/user', userRoute)
 
-app.listen(port)
+app.listen(port, () => {
+  console.log('Connection success')
+})

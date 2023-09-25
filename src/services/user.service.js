@@ -9,14 +9,13 @@ export default class User {
       const [data] = await connection.query('select * from users')
       return data
     } catch (error) {
-      console.log(error)
       return { error }
     } finally {
       connection.release()
     }
   }
   
-  static getUser = async (login) => {
+  static getUserByLogin = async (login) => {
     const connection = await Mysql.connect()
     try {
       const [ data ] = await connection.query('select * from users where name = ?', [ login ])
@@ -28,12 +27,24 @@ export default class User {
     }
   }
 
-  static addUser = async ({ name, password, truename, email }) => {
+  static getUserByEmail = async (email) => {
+    const connection = await Mysql.connect()
+    try {
+      const [data] = await connection.query('select * from users where email = ?', [email])
+      return data
+    } catch (error) {
+      return { error }
+    } finally {
+      connection.release()
+    }
+  }
+
+  static addUser = async ({ name, password, trueName, email }) => {
     const connection = await Mysql.connect()
     try {
       await connection.query(`
         call adduser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-      `,[name, password, '', '', truename, '', email, '', '', '', '', '', '', '', '', '', '']
+      `, [name, password, '', '', trueName, '', email, '', '', '', '', '', '', '', '', '', '']
       )
       return 'user successfully registered'
     } catch (error) {

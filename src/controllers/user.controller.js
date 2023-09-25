@@ -6,7 +6,7 @@ export default class UserController {
   static addUser = async (req, res) => {
     try {
       const body = req.body
-      const encodedPass = toBase64(body.truename + body.password)
+      const encodedPass = toBase64(body.name + body.password)
       if (!Object.entries(body).length) return res.status(404).send({ message: 'register invalid' })
       const response = await User.addUser({...body, password: encodedPass})
       return res.status(200).send({ message: response })
@@ -28,7 +28,7 @@ export default class UserController {
   static getUser = async (req, res) => {
     try {
       const { login } = req.params
-      const data = await User.getUser(login)
+      const data = await User.getUserByLogin(login)
       if (!data.length) return res.status(404).send({ message: 'record not found' })
       return res.json({ result: data })
     } catch (error) {
