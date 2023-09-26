@@ -6,7 +6,8 @@ const route = express.Router()
 
 route.post('/', UserMiddleware.validNewAccount, UserController.addUser)
 route.get('/get', UserController.getUsers)
-route.get('/get/:login', UserController.getUser)
+route.get('/get/login/:login', UserController.getUserByLogin)
+route.get('/get/email/:email', UserController.getUserByEmail)
 route.put('/changePass', UserController.changePass)
 
 export default route

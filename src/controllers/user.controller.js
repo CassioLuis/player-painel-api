@@ -25,12 +25,23 @@ export default class UserController {
     }
   }
   
-  static getUser = async (req, res) => {
+  static getUserByLogin = async (req, res) => {
     try {
       const { login } = req.params
       const data = await User.getUserByLogin(login)
       if (!data.length) return res.status(404).send({ message: 'record not found' })
-      return res.json({ result: data })
+      return res.json(data)
+    } catch (error) {
+      res.json({ error })
+    }
+  }
+
+  static getUserByEmail = async (req, res) => {
+    try {
+      const { email } = req.params
+      const data = await User.getUserByEmail(email)
+      if (!data.length) return res.status(404).send({ message: 'record not found' })
+      return res.json(data)
     } catch (error) {
       res.json({ error })
     }
