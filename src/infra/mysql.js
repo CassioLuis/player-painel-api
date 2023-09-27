@@ -1,13 +1,13 @@
 // import process from 'node:process'
-// import dotenv from 'dotenv'
-// dotenv.config()
+import dotenv from 'dotenv'
 import mysql from 'mysql2/promise'
+dotenv.config()
 
 const connection = {
-  host: '104.251.216.42',
-  user: 'player_panel',
-  password: 'root',
-  database: 'pw',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   waitForConnections: true, // Espera por conexões livres quando a pool está cheia
   connectionLimit: 50, // Número máximo de conexões na pool
   queueLimit: 0 // Limite da fila de conexões pendentes (0 significa ilimitado)

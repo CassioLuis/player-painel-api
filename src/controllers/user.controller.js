@@ -19,7 +19,7 @@ export default class UserController {
     try {
       const data = await User.getUsers()
       if (!data.length) return res.status(404).send({ message: 'records not found' })
-      return res.json({ message: data })
+      return res.json(data)
     } catch (error) {
       res.json({ error })
     }
@@ -50,8 +50,8 @@ export default class UserController {
   static changePass = async (req, res) => {
     try {
       const { login, newPass } = req.body
-      const data = await User.changePass(login, newPass)
-      res.json({ message: data })
+      await User.changePass(login, newPass)
+      return res.status(200).json({ message: 'password changed successfully' })
     } catch(error) {
       res.json({ error })
     }
