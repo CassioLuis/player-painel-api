@@ -48,6 +48,7 @@ export default class User {
       )
       return 'user successfully registered'
     } catch (error) {
+      console.log(error)
       return { error }
     } finally {
       connection.release()

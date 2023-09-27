@@ -7,12 +7,10 @@ export default class UserMiddleware {
     if (!name || !password || !trueName || !email) return res.status(400).send({ message: 'invalid form' })
     if (!validEmail(email)) return res.status(400).send({ message: 'invalid email' })
     try {
-      const hasRegistered = {}
-      const userName = await UserService.getUserByLogin(name)
-      const userEmail = await UserService.getUserByEmail(email)
-      if (userName.length) hasRegistered.name = 'Login em uso.'
-      if (userEmail.length) hasRegistered.email = 'E-mail em uso.'
-      if (Object.entries(hasRegistered).length) return res.status(400).send(hasRegistered)
+      let verify = await UserService.getUserByLogin(name)
+      if (verify.length) return res.status(400).send({ message: 'user already exists' })
+      verify = await UserService.getUserByEmail(email)
+      if (verify.length) return res.status(400).send({ message: 'user already exists' })
       next()
     } catch (error) {
       res.status(400).send({ message: error.message })
