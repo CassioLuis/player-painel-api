@@ -11,17 +11,17 @@ export default class UserController {
       const response = await User.addUser({...body, password: encodedPass})
       return res.status(200).send({ message: response })
     } catch (error) {
-      res.json({ error })
+      res.status(500).send({ message: error.message })
     }
   }
   
   static getUsers = async (req, res) => {
     try {
-      const data = await User.getUsers()
+      const [data] = await User.getUsers()
       if (!data.length) return res.status(404).send({ message: 'records not found' })
       return res.json(data)
     } catch (error) {
-      res.json({ error })
+      res.status(500).send({ message: error.message })
     }
   }
   
@@ -32,7 +32,7 @@ export default class UserController {
       if (!data.length) return res.status(404).send({ message: 'record not found' })
       return res.json(data)
     } catch (error) {
-      res.json({ error })
+      res.status(500).send({ message: error.message })
     }
   }
 
@@ -43,7 +43,7 @@ export default class UserController {
       if (!data.length) return res.status(404).send({ message: 'record not found' })
       return res.json(data)
     } catch (error) {
-      res.json({ error })
+      res.status(500).send({ message: error.message })
     }
   }
 
@@ -53,7 +53,7 @@ export default class UserController {
       await User.changePass(login, newPass)
       return res.status(200).json({ message: 'password changed successfully' })
     } catch(error) {
-      res.json({ error })
+      res.status(500).send({ message: error.message })
     }
   }
 }

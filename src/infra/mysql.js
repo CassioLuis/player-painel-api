@@ -1,6 +1,5 @@
-// import process from 'node:process'
-import dotenv from 'dotenv'
 import mysql from 'mysql2/promise'
+import dotenv from 'dotenv'
 dotenv.config()
 
 const connection = {
@@ -21,7 +20,7 @@ export default class Mysql {
     try {
       return await pool.getConnection()
     } catch (error) {
-      return { error }
+      console.log(error)
     }
   }
 }

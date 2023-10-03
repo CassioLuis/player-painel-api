@@ -6,22 +6,21 @@ export default class User {
   static getUsers = async () => {
     const connection = await Mysql.connect()
     try {
-      const [data] = await connection.query('select * from users')
-      return data
+      return await connection.query('select * from users')
     } catch (error) {
-      return { error }
+      console.log(error)
     } finally {
       connection.release()
     }
   }
-  
+
   static getUserByLogin = async (login) => {
     const connection = await Mysql.connect()
     try {
-      const [ data ] = await connection.query('select * from users where name = ?', [ login ])
+      const [data] = await connection.query('select * from users where name = ?', [login])
       return data
     } catch (error) {
-      return { error }
+      console.log(error)
     } finally {
       connection.release()
     }
@@ -33,7 +32,7 @@ export default class User {
       const [data] = await connection.query('select * from users where email = ?', [email])
       return data
     } catch (error) {
-      return { error }
+      console.log(error)
     } finally {
       connection.release()
     }
@@ -49,7 +48,6 @@ export default class User {
       return 'user successfully registered'
     } catch (error) {
       console.log(error)
-      return { error }
     } finally {
       connection.release()
     }
@@ -58,10 +56,10 @@ export default class User {
   static changePass = async (login, newPass) => {
     const connection = await Mysql.connect()
     try {
-      await connection.query('call changePasswd(?, ?)', [login, toBase64(login+newPass)])
+      await connection.query('call changePasswd(?, ?)', [login, toBase64(login + newPass)])
       return 'password changed successfully'
-    } catch (e) {
-      throw new Error(e)
+    } catch (error) {
+      console.log(error)
     } finally {
       connection.release()
     }
