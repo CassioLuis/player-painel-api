@@ -8,13 +8,13 @@ export default class UserController {
       const body = req.body
       const encodedPass = toBase64(body.name + body.password)
       if (!Object.entries(body).length) return res.status(404).send({ message: 'register invalid' })
-      const response = await User.addUser({...body, password: encodedPass})
-      return res.status(200).send({ message: response })
+      await User.addUser({ ...body, password: encodedPass })
+      return res.status(200).send({ message: 'user successfully registered' })
     } catch (error) {
       res.status(500).send({ message: error.message })
     }
   }
-  
+
   static getUsers = async (req, res) => {
     try {
       const [data] = await User.getUsers()
@@ -24,7 +24,7 @@ export default class UserController {
       res.status(500).send({ message: error.message })
     }
   }
-  
+
   static getUserByLogin = async (req, res) => {
     try {
       const { login } = req.params
@@ -52,7 +52,7 @@ export default class UserController {
       const { login, newPass } = req.body
       await User.changePass(login, newPass)
       return res.status(200).json({ message: 'password changed successfully' })
-    } catch(error) {
+    } catch (error) {
       res.status(500).send({ message: error.message })
     }
   }

@@ -45,7 +45,7 @@ export default class User {
         call adduser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
       `, [name, password, '', '', trueName, '', email, '', '', '', '', '', '', '', '', '', '']
       )
-      return 'user successfully registered'
+      return
     } catch (error) {
       console.log(error)
     } finally {
