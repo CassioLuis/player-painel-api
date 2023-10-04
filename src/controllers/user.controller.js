@@ -30,7 +30,7 @@ export default class UserController {
       const { login } = req.params
       const data = await User.getUserByLogin(login)
       if (!data.length) return res.status(404).send({ message: 'record not found' })
-      return res.json(data)
+      return res.json(true)
     } catch (error) {
       res.status(500).send({ message: error.message })
     }
@@ -41,7 +41,7 @@ export default class UserController {
       const { email } = req.params
       const data = await User.getUserByEmail(email)
       if (!data.length) return res.status(404).send({ message: 'record not found' })
-      return res.json(data)
+      return res.json(true)
     } catch (error) {
       res.status(500).send({ message: error.message })
     }
