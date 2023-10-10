@@ -1,6 +1,5 @@
 import Mysql from '../infra/mysql.js'
 import toBase64 from '../utils/passEncode.js'
-import jwt from 'jsonwebtoken'
 // import User from './user.service.js'
 
 export default class User {
@@ -15,9 +14,5 @@ export default class User {
     } finally {
       connection.release()
     }
-  }
-
-  static token (id) {
-    return jwt.sign({ id }, process.env.SECRET_JWT, { expiresIn: 86400 })
   }
 }
