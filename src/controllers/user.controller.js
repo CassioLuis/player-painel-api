@@ -49,8 +49,7 @@ export default class UserController {
 
   static changePass = async (req, res) => {
     try {
-      const { newPass } = req.body
-      const { userName, userId } = req
+      const { newPass, userName } = req.body
       const encodedPass = toBase64(userName + newPass)
       await User.changePass(userName, encodedPass)
       return res.status(200).json({ message: 'password changed successfully' })

@@ -28,8 +28,8 @@ export default class AuthMiddleware {
       if (!decoded) return res.status(401).send({ message: 'Invalid token' })
       const [user] = await UserService.getUserById(decoded.id)
       if (!user) return res.status(401).send({ message: 'Invalid token' })
-      req.userName = user.name
-      req.userId = user.ID
+      req.body.userName = user.name
+      req.body.userId = user.ID
       next()
     } catch (error) {
       res.status(500).send(error.message)
