@@ -1,7 +1,6 @@
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer'
-import hbs from 'nodemailer-express-handlebars'
-import fs from 'fs/promises'
+import mailerhbs from 'nodemailer-express-handlebars'
 import path from 'path'
 
 const transport = nodemailer.createTransport({
@@ -13,29 +12,19 @@ const transport = nodemailer.createTransport({
   }
 })
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const templatePath = path.join(__dirname, '../resources/mail/auth/');
-console.log(templatePath)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const viewPath = path.resolve(path.join(__dirname, '..', 'resources', 'mail', 'auth'))
 
-transport.use('compile', hbs({
-  viewEngine: 'handlebars',
-  viewPath: path.resolve('./src/resources/mail/'),
-  extName: '.html'
-}))
-
-async function readHtmlTemplate () {
-  try {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const templatePath = path.join(__dirname, '../resources/mail/auth/forgot_password.html');
-    console.log(templatePath)
-    const htmlContent = await fs.readFile(templatePath, 'utf-8');
-    return htmlContent;
-  } catch (error) {
-    console.error('Erro ao ler o arquivo de template HTML:', error);
-    throw error;
-  }
+const options = {
+  viewEngine: {
+    partialsDir: viewPath,
+    defaultLayout: false,
+  },
+  viewPath,
+  extName: '.html',
 }
 
-export { transport, readHtmlTemplate }
+transport.use('compile', mailerhbs(options))
+
+export { transport }
