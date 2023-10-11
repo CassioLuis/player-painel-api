@@ -18,17 +18,18 @@ export default class UserController {
     const { email } = req.body
     try {
       const [user] = await User.getUserByEmail(email)
-      if (!user) res.status(404).send({ message: 'user not found' })
-      const forgotToken = Token.generate(user.ID, { expiresIn: 10000 })
+      if (!user) return res.status(404).send({ message: 'user not found' })
+      const forgotToken = Token.generate(user.ID, { expiresIn: 500 })
       const destination = {
         to: email,
-        from: 'cassiocaruzo@gmail.com',
+        from: 'pwblackstar@suporte.com',
         template: 'forgot_password',
-        context: { forgotToken }
+        context: { forgotToken },
+        subject: 'PW Blackstar - Recuperação'
       }
       transport.sendMail(destination, (error) => {
         if (error) return res.status(400).send({ error: 'Cannot send forgot password email' })
-        return res.send()
+        return res.status(200).json({ token: forgotToken })
       })
     } catch (error) {
       res.status(400).send({ message: error.message })

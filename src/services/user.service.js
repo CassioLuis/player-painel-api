@@ -1,5 +1,4 @@
 import Mysql from '../infra/mysql.js'
-import toBase64 from '../utils/passEncode.js'
 
 export default class User {
 
@@ -7,6 +6,18 @@ export default class User {
     const connection = await Mysql.connect()
     try {
       return await connection.query('select * from users')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      connection.release()
+    }
+  }
+
+  static getUserById = async (id) => {
+    const connection = await Mysql.connect()
+    try {
+      const [data] = await connection.query('select * from users where ID = ?', [id])
+      return data
     } catch (error) {
       console.log(error)
     } finally {
@@ -56,8 +67,8 @@ export default class User {
   static changePass = async (login, newPass) => {
     const connection = await Mysql.connect()
     try {
-      await connection.query('call changePasswd(?, ?)', [login, toBase64(login + newPass)])
-      return 'password changed successfully'
+      await connection.query('call changePasswd(?, ?)', [login, newPass])
+      return
     } catch (error) {
       console.log(error)
     } finally {
