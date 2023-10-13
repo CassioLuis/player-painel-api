@@ -20,11 +20,13 @@ export default class UserController {
       const [user] = await User.getUserByEmail(email)
       if (!user) return res.status(404).send({ message: 'user not found' })
       const forgotToken = Token.generate(user.ID, { expiresIn: 500 })
+      const encodedString = forgotToken.replace(/\./g, "%20")
+      const url = `http://localhost:5173/alterar-senha/${encodedString}`
       const destination = {
         to: email,
         from: 'pwblackstar@suporte.com',
         template: 'forgot_password',
-        context: { forgotToken },
+        context: { url },
         subject: 'PW Blackstar - Recuperação'
       }
       transport.sendMail(destination, (error) => {
