@@ -9,7 +9,11 @@ const transport = nodemailer.createTransport({
   auth: {
     user: process.env.MAILER_USER,
     pass: process.env.MAILER_PASS
-  }
+  },
+  // secure: false,
+  // tls: {
+  //   rejectUnauthorized: false
+  // }
 })
 
 const __filename = fileURLToPath(import.meta.url)
