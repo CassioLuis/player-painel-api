@@ -19,11 +19,10 @@ export default class AuthMiddleware {
   static async validToken (req, res, next) {
     try {
       const { authorization } = req.headers
-      const { newPass } = req.body
-      if (!authorization) return res.status(401)
+      if (!authorization) return res.status(401).send({ message: 'Invalid token' })
       const [schema, token] = authorization.split(' ')
-      if (!schema || !token) return res.status(401)
-      if (schema !== 'Bearer') return res.status(401)
+      if (!schema || !token) return res.status(401).send({ message: 'Invalid token' })
+      if (schema !== 'Bearer') return res.status(401).send({ message: 'Invalid token' })
       const decoded = jwt.verify(token, process.env.SECRET_JWT, (error, decoded) => decoded)
       if (!decoded) return res.status(401).send({ message: 'Invalid token' })
       const [user] = await UserService.getUserById(decoded.id)
