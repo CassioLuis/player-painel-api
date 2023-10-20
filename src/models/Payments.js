@@ -22,6 +22,10 @@ const PaymentsSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  dateLastUpdated: {
+    type: Date,
+    required: true
+  },
   transactionAmount: {
     type: Number,
     required: true
