@@ -60,13 +60,16 @@ export default class PaymentsController {
       if (!order) return res.status(404).json({ message: 'order not found' })
 
       await Payments.updateOrder(order, { status, date_last_updated, transaction_amount })
-      // 1 real 1000 gold, 100 = quantidade de pratas para totalizar 1 gold
+
+      if (order.status === 'approved') return res.status(200)
+      
       if (status === 'approved') {
+      // 1 real 1000 gold, 100 = quantidade de pratas para totalizar 1 gold
         const cashAmount = transaction_amount * 1000 * 100
         await Cash.add(order.mysqlUserId, cashAmount)
       }
 
-      res.status(200).json({ id, status, date_last_updated, transaction_amount, cashAmount })
+      res.status(200)
     } catch (error) {
       res.status(500).json({ message: 'Internal error' })
     }
