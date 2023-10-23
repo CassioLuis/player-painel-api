@@ -1,7 +1,8 @@
 import Http from '../modules/http.js'
-import PaymentsService from '../services/payments.service.js'
+import Payments from '../services/payments.service.js'
+import Cash from '../services/cash.service.js'
 
-export default class Payments {
+export default class PaymentsController {
 
   static async create (req, res) {
     try {
@@ -26,7 +27,7 @@ export default class Payments {
         qrCode: point_of_interaction.transaction_data.qr_code_base64,
         status
       }
-      await PaymentsService.create(payload)
+      await Payments.create(payload)
 
       res.status(200).json(payload)
     }
@@ -38,7 +39,7 @@ export default class Payments {
   static async getAllByUser (req, res) {
     try {
       const { userId } = req.body
-      const response = await PaymentsService.getAllByUser(userId)
+      const response = await Payments.getAllByUser(userId)
       res.status(200).json(response)
     } catch (error) {
       res.status(500).send(error)
@@ -55,11 +56,15 @@ export default class Payments {
 
       const { id, status, date_last_updated, transaction_amount } = response
 
-      const order = await PaymentsService.getOrderById(id)
+      const order = await Payments.getOrderById(id)
       if (!order) return res.status(404).json({ message: 'order not found' })
 
-      await PaymentsService.updateOrder(order, { status, date_last_updated, transaction_amount })
-      res.status(200).json({ id, status, date_last_updated, transaction_amount })
+      await Payments.updateOrder(order, { status, date_last_updated, transaction_amount })
+      // 1 real 1000 gold, 100 = quantidade de pratas para totalizar 1 gold
+      const cashAmount = transaction_amount * 1000 * 100
+      await Cash.add(order.mysqlUserId, cashAmount)
+
+      res.status(200).json({ id, status, date_last_updated, transaction_amount, cashAmount })
     } catch (error) {
       res.status(500).json({ message: 'Internal error' })
     }
