@@ -24,8 +24,8 @@ export default class PaymentsController {
         paymentMethod: payment_method.id,
         mysqlUserId: userId,
         transactionAmount: transaction_amount,
-        qrCode: point_of_interaction.transaction_data.qr_code_base64,
-        status
+        status,
+        qrCode: point_of_interaction.transaction_data.qr_code_base64
       }
       await Payments.create(payload)
 
@@ -46,28 +46,16 @@ export default class PaymentsController {
     }
   }
 
-  static async notification (req, res) {
+  static async handleUpdateOrder (req, res) {
     try {
-      const { body } = req
-      if (!body) return res.status(404).json({ message: 'notification not found' })
+      const { order, payment: { status, date_last_updated, transaction_amount } } = req
 
-      const response = await Http.get(`${process.env.API_MERCADO_PAGO}payments/${body.data.id}`)
-      if (!response) return res.status(404).json({ message: 'payment not found' })
-
-      const { id, status, date_last_updated, transaction_amount } = response
-
-      const order = await Payments.getOrderById(id)
-      if (!order) return res.status(404).json({ message: 'order not found' })
-      
       await Payments.updateOrder(order, { status, date_last_updated, transaction_amount })
-      
-      if (order.status === 'approved') return res.status(200).json({ message: 'payment already approved' })
 
-      if (status === 'approved') {
-      // 1 real 1000 gold, 100 = quantidade de pratas para totalizar 1 gold
-        const cashAmount = transaction_amount * 1000 * 100
-        await Cash.add(order.mysqlUserId, cashAmount)
-      }
+      // if (status === 'approved') {
+      const cashAmount = transaction_amount * 1000 * 100 // 1 real 1000 gold, 100 = quantidade de pratas para totalizar 1 gold
+      await Cash.add(order.mysqlUserId, cashAmount)
+      // }
 
       res.status(200).json({ message: 'payment updated' })
     } catch (error) {
