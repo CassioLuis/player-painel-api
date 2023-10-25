@@ -29,6 +29,14 @@ const PaymentsSchema = new mongoose.Schema({
   transactionAmount: {
     type: Number,
     required: true
+  },
+  goldAmount: {
+    type: Number,
+    required: true
+  },
+  qrCode: {
+    type: String,
+    required: true
   }
 })
 
