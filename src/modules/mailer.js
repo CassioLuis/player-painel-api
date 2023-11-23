@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url'
 import nodemailer from 'nodemailer'
 import mailerhbs from 'nodemailer-express-handlebars'
 import path from 'path'
@@ -9,16 +9,13 @@ const transport = nodemailer.createTransport({
   auth: {
     user: process.env.MAILER_USER,
     pass: process.env.MAILER_PASS
-  },
-  // secure: false,
-  // tls: {
-  //   rejectUnauthorized: false
-  // }
+  }
 })
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const viewPath = path.resolve(path.join(__dirname, '..', 'resources', 'mail', 'auth'))
+const image = path.resolve(path.join(__dirname, '..', 'resources', 'mail', 'auth', 'images', 'image-6.png'))
 
 const options = {
   viewEngine: {
@@ -31,4 +28,4 @@ const options = {
 
 transport.use('compile', mailerhbs(options))
 
-export { transport }
+export { transport, image }

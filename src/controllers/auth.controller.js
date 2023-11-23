@@ -1,6 +1,6 @@
 import User from '../services/user.service.js'
 import Token from '../modules/jwt.js'
-import { transport } from '../modules/mailer.js'
+import { transport, image } from '../modules/mailer.js'
 
 export default class UserController {
 
@@ -26,9 +26,16 @@ export default class UserController {
       const destination = {
         to: email,
         from: 'pwblackstar@suporte.com',
-        template: 'forgot_password',
+        template: 'forgot_password-2',
         context: { url },
-        subject: 'PW Blackstar - Recuperação'
+        subject: 'PW Blackstar - Recuperar Senha',
+        attachments: [
+          {
+            filename: 'image-6.png',
+            path: image,
+            cid: 'image-6'
+          }
+        ]
       }
       transport.sendMail(destination, (error) => {
         if (error) return res.status(400).send({ error: 'Cannot send forgot password email' })

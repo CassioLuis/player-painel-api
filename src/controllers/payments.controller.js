@@ -12,10 +12,18 @@ export default class PaymentsController {
       delete body.userId
       delete body.userName
       const response = await Http.post(`${process.env.API_MERCADO_PAGO}payments`, body)
-      
+
       if (!response) return res.status(400).json({ message: 'mercado pago nao respondeu' })
-      
-      const { id, date_created, date_last_updated, payment_method, status, transaction_amount, point_of_interaction } = response
+
+      const {
+        id,
+        date_created,
+        date_last_updated,
+        payment_method,
+        status,
+        transaction_amount,
+        point_of_interaction
+      } = response
 
       const payload = {
         orderId: id,
@@ -28,6 +36,7 @@ export default class PaymentsController {
         goldAmount: Gold.calc(transaction_amount) / 100,
         qrCode: point_of_interaction.transaction_data.qr_code_base64
       }
+
       await Payments.create(payload)
 
       res.status(200).json(payload)
