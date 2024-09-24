@@ -8,7 +8,7 @@ export default class PaymentMiddleware {
     if (action === 'payment.created') return res.status(400).json({ message: 'payment action created' })
 
     try {
-      const payment = await Http.get(`${process.env.API_MERCADO_PAGO}payments/${id}`)
+      const payment = await Http.get(`${process.env.API_MERCADO_PAGO}/payments/${id}`)
       if (!payment) return res.status(404).json({ message: 'payment not found' })
 
       const order = await Payments.getOrderById(id)

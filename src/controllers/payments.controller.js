@@ -11,7 +11,7 @@ export default class PaymentsController {
 
       delete body.userId
       delete body.userName
-      const response = await Http.post(`${process.env.API_MERCADO_PAGO}payments`, body)
+      const response = await Http.post(`${process.env.API_MERCADO_PAGO}/payments`, body)
 
       if (!response) return res.status(400).json({ message: 'mercado pago nao respondeu' })
 
@@ -36,7 +36,6 @@ export default class PaymentsController {
         goldAmount: Gold.calc(transaction_amount) / 100,
         qrCode: point_of_interaction.transaction_data.qr_code_base64
       }
-
       await Payments.create(payload)
 
       res.status(200).json(payload)
@@ -62,9 +61,8 @@ export default class PaymentsController {
       const { order, payment: { status, date_last_updated, transaction_amount } } = req
 
       await Payments.updateOrder(order, { status, date_last_updated, transaction_amount })
-
+      
       await Cash.add(order.mysqlUserId, Gold.calc(transaction_amount))
-
       res.status(200).json({ message: 'payment updated' })
     } catch (error) {
       res.status(500).json({ message: 'Internal error' })

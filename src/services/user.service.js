@@ -54,7 +54,7 @@ export default class User {
     try {
       await connection.query(`
         call adduser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-      `, [name, password, '', '', trueName, '', email, '', '', '', '', '', '', '', '', '', '']
+      `, [name, password, '', '', trueName, '', email, '', '', '', '', '', '', 0, '', '', '']
       )
       return
     } catch (error) {

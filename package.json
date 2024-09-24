@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "pm2 delete painel_api || true && pm2 start index.js --name 'painel_api'",
+    "dev": "pm2 delete painel_api || true && nodemon index"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +29,7 @@
     "nodemailer": "^6.9.6",
     "nodemailer-express-handlebars": "^6.1.0",
     "nodemon": "^3.0.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "pm2": "^5.4.2"
   }
 }
