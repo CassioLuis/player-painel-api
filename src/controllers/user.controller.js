@@ -1,5 +1,7 @@
 import User from '../services/user.service.js'
 import toBase64 from '../utils/passEncode.js'
+import Cash from '../services/cash.service.js'
+import Gold from '../utils/gold.js'
 
 export default class UserController {
 
@@ -9,6 +11,8 @@ export default class UserController {
       const encodedPass = toBase64(body.name + body.password)
       if (!Object.entries(body).length) return res.status(404).send({ message: 'register invalid' })
       await User.addUser({ ...body, password: encodedPass })
+      const [user] = await User.getUserByLogin(body.name)
+      await Cash.add(user.ID, 500)
       return res.status(200).send({ message: 'user successfully registered' })
     } catch (error) {
       res.status(500).send({ message: error.message })

@@ -20,6 +20,10 @@ app.use('/user', userRoute)
 app.use('/auth', authRoute)
 app.use('/payments', paymentsRoute)
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'API is running' });
+})
+
 app.listen(process.env.PORT || port, () => {
   console.log(`Connection success on port ${process.env.PORT || port}`)
 })
