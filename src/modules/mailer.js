@@ -3,12 +3,22 @@ import nodemailer from 'nodemailer'
 import mailerhbs from 'nodemailer-express-handlebars'
 import path from 'path'
 
+// const transport = nodemailer.createTransport({
+//   host: process.env.MAILER_HOST,
+//   port: process.env.MAILER_PORT,
+//   auth: {
+//     user: process.env.MAILER_USER,
+//     pass: process.env.MAILER_PASS
+//   }
+// })
+
 const transport = nodemailer.createTransport({
-  host: process.env.MAILER_HOST,
-  port: process.env.MAILER_PORT,
+  host: process.env.GMAIL_SMTP_HOST,
+  port: process.env.GMAIL_SMTP_PORT,
+  secure: true,
   auth: {
-    user: process.env.MAILER_USER,
-    pass: process.env.MAILER_PASS
+    user: process.env.GMAIL_SMTP_USER,
+    pass: process.env.GMAIL_SMTP_PASS
   }
 })
 

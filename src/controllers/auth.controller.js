@@ -22,10 +22,10 @@ export default class UserController {
       const forgotToken = Token.generate(user.ID, { expiresIn: 500 })
       const encodedString = forgotToken.replace(/\./g, "%20")
       // const url = `http://localhost:5173/alterar-senha/${encodedString}`
-      const url = `https://v-dashboard-ten.vercel.app/alterar-senha/${encodedString}`
+      const url = `${process.env.BASE_URL}/alterar-senha/${encodedString}`
       const destination = {
         to: email,
-        from: 'pwblackstar@suporte.com',
+        from: 'suportepwbs@gmail.com',
         template: 'forgot_password-2',
         context: { url },
         subject: 'PW Blackstar - Recuperar Senha',
